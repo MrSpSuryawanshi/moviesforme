@@ -1,0 +1,35 @@
+name: Code Summary
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  analyze-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Code Analysis
+        run: npm run analyze
+
+      - name: Generate Code Summary
+        run: npm run generate-summary
+
+      - name: Commit and Push Summary Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add README.md
+          git commit -m "Update code summary"
+          git push
